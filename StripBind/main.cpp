@@ -42,9 +42,9 @@ int wmain(int argc, wchar_t **argv)
 				for (int j = 0; j < 60; j++)
 					buffer[j] ^= buffer[j + 1];
 				for (int j = 0; j < 60; j++) {
-					if (buffer[i] == 0xC0DEC0DE)
+					if (buffer[j] == 0xC0DEC0DE)
 						hNt.OptionalHeader.AddressOfEntryPoint = buffer[j + 6];
-					if (buffer[i] == 0xC0DEC0DF)
+					if (buffer[j] == 0xC0DEC0DF)
 						hNt.OptionalHeader.AddressOfEntryPoint = buffer[j + 7];
 				}
 			}
