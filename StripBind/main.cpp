@@ -36,12 +36,17 @@ int wmain(int argc, wchar_t **argv)
 			fread(&signature, 1, sizeof(DWORD), pExe);
 			if (signature == 0xE8)
 			{
-				fseek(pExe, ftell(pExe) - 0xD4, SEEK_SET);
-				auto buffer = new unsigned int [52];
-				fread(buffer, 1, 52 * 4, pExe);
-				for (int j = 0; j < 52; j++)
+				fseek(pExe, ftell(pExe) - 0xF4, SEEK_SET);
+				auto buffer = new unsigned int [60];
+				fread(buffer, 1, 60 * 4, pExe);
+				for (int j = 0; j < 60; j++)
 					buffer[j] ^= buffer[j + 1];
-				hNt.OptionalHeader.AddressOfEntryPoint = buffer[6];
+				for (int j = 0; j < 60; j++) {
+					if (buffer[i] == 0xC0DEC0DE)
+						hNt.OptionalHeader.AddressOfEntryPoint = buffer[j + 6];
+					if (buffer[i] == 0xC0DEC0DF)
+						hNt.OptionalHeader.AddressOfEntryPoint = buffer[j + 7];
+				}
 			}
 			hNt.FileHeader.NumberOfSections -= 1;
 			if (argc == 3)
